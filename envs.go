@@ -2,12 +2,14 @@ package utils
 
 import (
 	"os"
-
-	log "github.com/sirupsen/logrus"
 )
 
+type logger interface {
+	Fatalf(format string, v ...interface{})
+}
+
 // Getenv will return OS environment with default value. Will exit if a mandatory envrionment variable isn't set
-func Getenv(logger *log.Logger, envName, defaultValue string, mandatory bool) string {
+func Getenv(logger logger, envName, defaultValue string, mandatory bool) string {
 	value := os.Getenv(envName)
 	if value != "" {
 		return value
