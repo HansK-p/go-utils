@@ -36,7 +36,8 @@ func TestRunHTTPHealthListener(t *testing.T) {
 	phh := PodHealthHandler{PodHealthObject: &mh}
 	log.Printf("PHH: %v", phh)
 	logger := GetLogger()
-	RunPodHTTPHealthListener(logger, &phh)
+	RunPodHTTPHealthListener(logger, "127.0.0.1:8080", &phh)
 	validate(t, "http://localhost:8080/healthy")
 	validate(t, "http://localhost:8080/healthz")
+	//	t.Fatal("Just to make things fail")
 }

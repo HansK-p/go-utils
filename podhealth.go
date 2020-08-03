@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"net"
 	"net/http"
 
@@ -43,15 +42,13 @@ func (phh *PodHealthHandler) IsReady(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(message))
 }
 
-const healthPort = 8080
-
 //RunPodHTTPHealthListener will start a listener listening for health and liveness checks
-func RunPodHTTPHealthListener(logger *log.Logger, phh *PodHealthHandler) {
+func RunPodHTTPHealthListener(logger *log.Logger, address string, phh *PodHealthHandler) {
 	m := http.NewServeMux()
 	m.HandleFunc("/healthz", phh.IsAlive)
 	m.HandleFunc("/healthy", phh.IsReady)
-	logger.Infof("Starting /healthz and /healthy endpoints on 0.0.0.0:%d", healthPort)
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", healthPort))
+	logger.Infof("Starting /healthz and /healthy endpoints on %v", address)
+	lis, err := net.Listen("tcp", address)
 	if err != nil {
 		logger.Fatalf("Failed to start Health endpoint: %v", err)
 	}
