@@ -1,10 +1,6 @@
-/*
-This is not a "real" unit test, I assume, as it actually starts a real web server on a real port - and takes it down again.
-*/
-package utils
+package podhealth
 
 import (
-	"log"
 	"net/http"
 	"testing"
 )
@@ -31,13 +27,10 @@ func validate(t *testing.T, url string) {
 }
 
 func TestRunHTTPHealthListener(t *testing.T) {
-	log.Println("Hmmm")
 	mh := MockHealth{}
 	phh := PodHealthHandler{PodHealthObject: &mh}
-	log.Printf("PHH: %v", phh)
 	logger := GetLogger()
 	RunPodHTTPHealthListener(logger, "127.0.0.1:8080", &phh)
 	validate(t, "http://localhost:8080/healthy")
 	validate(t, "http://localhost:8080/healthz")
-	//	t.Fatal("Just to make things fail")
 }
