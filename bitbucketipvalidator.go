@@ -1,4 +1,4 @@
-package bitbucketipvalidator
+package utils
 
 import (
 	"encoding/json"

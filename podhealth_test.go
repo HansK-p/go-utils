@@ -1,4 +1,4 @@
-package podhealth
+package utils
 
 import (
 	"net/http"
@@ -29,7 +29,7 @@ func validate(t *testing.T, url string) {
 func TestRunHTTPHealthListener(t *testing.T) {
 	mh := MockHealth{}
 	phh := PodHealthHandler{PodHealthObject: &mh}
-	logger := GetLogger()
+	logger := NewLogger()
 	RunPodHTTPHealthListener(logger, "127.0.0.1:8080", &phh)
 	validate(t, "http://localhost:8080/healthy")
 	validate(t, "http://localhost:8080/healthz")

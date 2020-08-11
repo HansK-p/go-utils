@@ -1,4 +1,4 @@
-package bitbucketipvalidator
+package utils
 
 import (
 	"net"
@@ -7,13 +7,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type checkdata struct {
+type checkdatabiv struct {
 	ipAddr         string
 	expectedResult bool
 }
 
 func TestValidateIP(t *testing.T) {
-	checkdatas := []checkdata{
+	checkdatas := []checkdatabiv{
 		{
 			ipAddr:         "10.10.10.10",
 			expectedResult: false,

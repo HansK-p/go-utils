@@ -1,11 +1,11 @@
-package logger
+package utils
 
 import (
 	log "github.com/sirupsen/logrus"
 )
 
-// GetLogger will create and return a Logrus base logger
-func GetLogger() *log.Logger {
+// NewLogger will create and return a Logrus base logger
+func NewLogger() *log.Logger {
 	logger := log.New()
 	logger.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,

@@ -1,4 +1,4 @@
-package envs
+package utils
 
 import (
 	"os"

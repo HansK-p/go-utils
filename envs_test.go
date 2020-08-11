@@ -1,4 +1,4 @@
-package envs
+package utils
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 )
 
 // logger *log.Logger, envName, defaultValue string, mandatory bool)
-type checkdata struct {
+type checkdataenv struct {
 	envName                             string
 	envValue                            string
 	defaultValue                        string
@@ -24,7 +24,7 @@ func (l *loggerMock) Fatalf(format string, v ...interface{}) {
 
 func TestGetenv(t *testing.T) {
 	lm := loggerMock{fatalfExecuted: false}
-	checkdatas := []checkdata{{
+	checkdatas := []checkdataenv{{
 		envName:                             "TESTING",
 		envValue:                            "",
 		defaultValue:                        "",
