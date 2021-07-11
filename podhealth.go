@@ -43,7 +43,7 @@ func (phh *PodHealthHandler) IsReady(w http.ResponseWriter, r *http.Request) {
 }
 
 //RunPodHTTPHealthListener will start a listener listening for health and liveness checks
-func RunPodHTTPHealthListener(logger *log.Logger, address string, phh *PodHealthHandler) {
+func RunPodHTTPHealthListener(logger *log.Entry, address string, phh *PodHealthHandler) {
 	m := http.NewServeMux()
 	m.HandleFunc("/healthz", phh.IsAlive)
 	m.HandleFunc("/healthy", phh.IsReady)

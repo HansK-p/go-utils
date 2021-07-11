@@ -3,6 +3,8 @@ package utils
 import (
 	"net/http"
 	"testing"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type MockHealth struct {
@@ -29,7 +31,7 @@ func validate(t *testing.T, url string) {
 func TestRunHTTPHealthListener(t *testing.T) {
 	mh := MockHealth{}
 	phh := PodHealthHandler{PodHealthObject: &mh}
-	logger := NewLogger()
+	logger := NewLogger().WithFields(log.Fields{})
 	RunPodHTTPHealthListener(logger, "127.0.0.1:8080", &phh)
 	validate(t, "http://localhost:8080/healthy")
 	validate(t, "http://localhost:8080/healthz")
