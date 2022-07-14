@@ -1,12 +1,12 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
-	yaml "gopkg.in/yaml.v2"
 )
 
 func LoadUrlJsonWithHttpRequest(logger *log.Entry, client *http.Client, req *http.Request, data interface{}) error {
@@ -24,7 +24,7 @@ func LoadUrlJsonWithHttpRequest(logger *log.Entry, client *http.Client, req *htt
 		return fmt.Errorf("when reading response body: %w", err)
 	}
 	logger.Debugf("Body to Json decode: %s", string(body))
-	err = yaml.Unmarshal(body, data)
+	err = json.Unmarshal(body, data)
 	if err != nil {
 		return fmt.Errorf("unmarshal the response body: %w", err)
 	}
@@ -43,7 +43,6 @@ func LoadUrlJsonWithHttpClient(logger *log.Entry, client *http.Client, url strin
 	return LoadUrlJsonWithHttpRequest(logger, client, req, data)
 }
 
-// LoadFileYaml will load a Yaml file and unmarshal it into the provided interface
 func LoadUrlJson(logger *log.Entry, url string, data interface{}) error {
 	logger = logger.WithFields(log.Fields{"Function": "LoadUrlJson", "URL": url})
 	logger.Debugf("Creating http client")
