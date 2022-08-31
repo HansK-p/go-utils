@@ -23,6 +23,9 @@ func LoadUrlJsonWithHttpRequest(logger *log.Entry, client *http.Client, req *htt
 	if err != nil {
 		return fmt.Errorf("when reading response body: %w", err)
 	}
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		return fmt.Errorf("the endpoint '%v' returned http status code '%d' and body '%s'", req.URL, res.StatusCode, string(body))
+	}
 	logger.Debugf("Body to Json decode: %s", string(body))
 	err = json.Unmarshal(body, data)
 	if err != nil {

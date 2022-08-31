@@ -66,4 +66,10 @@ func TestLoadUrlJson(t *testing.T) {
 	if mockData.Age != mockAge {
 		t.Errorf("Mock name should have been '%d', but was '%d'", mockAge, mockData.Age)
 	}
+	url := server.URL + "/notfoundendpoint"
+	if err := LoadUrlJson(logger, url, mockData); err == nil {
+		t.Fatalf("accessing the URL '%s' should have failed with a 404", url)
+	} else if !strings.Contains(err.Error(), "404") {
+		t.Fatalf("accessing the URL should have failed with a 404, but got: %s", err)
+	}
 }
