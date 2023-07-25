@@ -30,9 +30,14 @@ func validate(t *testing.T, url string, expect int) {
 
 func TestRunHTTPHealthListener(t *testing.T) {
 	mh, muh := MockHealth{}, MockUnHealth{}
-	phh := PodHealthHandler{PodHealthObject: &mh}
 	logger := NewLogger().WithFields(log.Fields{})
+	phh := PodHealthHandler{}
 	RunPodHTTPHealthListener(logger, "127.0.0.1:8080", &phh)
+
+	validate(t, "http://localhost:8080/healthy", 200)
+	validate(t, "http://localhost:8080/healthz", 200)
+
+	phh.PodHealthObject = &mh
 	validate(t, "http://localhost:8080/healthy", 200)
 	validate(t, "http://localhost:8080/healthz", 200)
 

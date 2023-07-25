@@ -23,6 +23,9 @@ type PodHealthHandler struct {
 func (phh *PodHealthHandler) IsAlive(w http.ResponseWriter, r *http.Request) {
 	healthy, message := true, "No health checks defined"
 	for _, podHealthObject := range append(phh.PodHealthObjects, phh.PodHealthObject) {
+		if podHealthObject == nil {
+			continue
+		}
 		healthy, message = podHealthObject.IsAlive()
 		if !healthy {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -38,6 +41,9 @@ func (phh *PodHealthHandler) IsAlive(w http.ResponseWriter, r *http.Request) {
 func (phh *PodHealthHandler) IsReady(w http.ResponseWriter, r *http.Request) {
 	healthy, message := true, "No health checks defined"
 	for _, podHealthObject := range append(phh.PodHealthObjects, phh.PodHealthObject) {
+		if podHealthObject == nil {
+			continue
+		}
 		healthy, message = podHealthObject.IsReady()
 		if !healthy {
 			w.WriteHeader(http.StatusInternalServerError)
