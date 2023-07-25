@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"strings"
@@ -83,7 +83,7 @@ func NewBitbucketIPValidator(logger *log.Logger) (*BitbucketIPValidator, error) 
 		entry.Warnf("Error downloading from URL %v: %v", ipRangesURL, err)
 		return nil, err
 	}
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
 		entry.Warnf("Error downloading body from URL %v: %v", ipRangesURL, err)

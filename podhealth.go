@@ -15,34 +15,41 @@ type PodHealthObject interface {
 
 // PodHealthHandler contains what is needed in order to validate health
 type PodHealthHandler struct {
-	PodHealthObject PodHealthObject
+	PodHealthObject  PodHealthObject
+	PodHealthObjects []PodHealthObject
 }
 
 // IsAlive is to be used by the Pod liveness probe
 func (phh *PodHealthHandler) IsAlive(w http.ResponseWriter, r *http.Request) {
-	health, message := phh.PodHealthObject.IsAlive()
-	if health {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(message))
-		return
+	healthy, message := true, "No health checks defined"
+	for _, podHealthObject := range append(phh.PodHealthObjects, phh.PodHealthObject) {
+		healthy, message = podHealthObject.IsAlive()
+		if !healthy {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(message))
+			return
+		}
 	}
-	w.WriteHeader(http.StatusInternalServerError)
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(message))
 }
 
 // IsReady is to be used by the Pod readiness probe
 func (phh *PodHealthHandler) IsReady(w http.ResponseWriter, r *http.Request) {
-	health, message := phh.PodHealthObject.IsReady()
-	if health {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(message))
-		return
+	healthy, message := true, "No health checks defined"
+	for _, podHealthObject := range append(phh.PodHealthObjects, phh.PodHealthObject) {
+		healthy, message = podHealthObject.IsReady()
+		if !healthy {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(message))
+			return
+		}
 	}
-	w.WriteHeader(http.StatusInternalServerError)
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(message))
 }
 
-//RunPodHTTPHealthListener will start a listener listening for health and liveness checks
+// RunPodHTTPHealthListener will start a listener listening for health and liveness checks
 func RunPodHTTPHealthListener(logger *log.Entry, address string, phh *PodHealthHandler) {
 	m := http.NewServeMux()
 	m.HandleFunc("/healthz", phh.IsAlive)

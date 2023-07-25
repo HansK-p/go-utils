@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	log "github.com/sirupsen/logrus"
 	yaml "gopkg.in/yaml.v2"
@@ -10,7 +10,7 @@ import (
 
 // LoadFileYaml will load a Yaml file and unmarshal it into the provided interface
 func LoadFileYaml(logger *log.Entry, filename string, data interface{}) error {
-	fileContent, err := ioutil.ReadFile(filename)
+	fileContent, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("reading the file '%s': %w", filename, err)
 	}

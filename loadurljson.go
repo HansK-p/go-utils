@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
@@ -19,7 +19,7 @@ func LoadUrlJsonWithHttpRequest(logger *log.Entry, client *http.Client, req *htt
 	if res.Body != nil {
 		defer res.Body.Close()
 	}
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return fmt.Errorf("when reading response body: %w", err)
 	}
