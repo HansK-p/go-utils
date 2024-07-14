@@ -1,4 +1,4 @@
-package loadfilesyaml
+package utils
 
 import (
 	"fmt"
@@ -11,20 +11,20 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type CfgFolder struct {
+type CfgLoadFilesYamlFolder struct {
 	Path      string `yaml:"path"`
 	Recursive bool   `yaml:"recursive"`
 }
 
-type Configuration struct {
-	Folders         []*CfgFolder `yaml:"folders"`
-	AllowedSuffixes []string     `yaml:"allowed_suffixes"`
+type CfgLoadFilesYaml struct {
+	Folders         []*CfgLoadFilesYamlFolder `yaml:"folders"`
+	AllowedSuffixes []string                  `yaml:"allowed_suffixes"`
 }
 
 type LoadFilesYamlOptions struct {
 	Logger       *log.Entry
 	DataProvider func() (data interface{})
-	Config       *Configuration
+	Config       *CfgLoadFilesYaml
 }
 
 func LoadFilesYaml(opts *LoadFilesYamlOptions) (datas []interface{}, errs []error) {
@@ -59,7 +59,7 @@ func loadFilesYamlHasAllowedSuffix(name string, opts *LoadFilesYamlOptions) (has
 	return false
 }
 
-func loadFilesYamlFromFolder(cfgFolder *CfgFolder, opts *LoadFilesYamlOptions) (datas []interface{}, errs []error) {
+func loadFilesYamlFromFolder(cfgFolder *CfgLoadFilesYamlFolder, opts *LoadFilesYamlOptions) (datas []interface{}, errs []error) {
 	logger := opts.Logger.WithFields(log.Fields{"Function": "loadFromFolder", "ConfigFolderPath": cfgFolder.Path})
 	if cfgFolder.Recursive {
 		return loadFilesYamlFromFolderRecursive(cfgFolder, opts)
@@ -87,7 +87,7 @@ func loadFilesYamlFromFolder(cfgFolder *CfgFolder, opts *LoadFilesYamlOptions) (
 	return datas, errs
 }
 
-func loadFilesYamlFromFolderRecursive(cfgFolder *CfgFolder, opts *LoadFilesYamlOptions) (datas []interface{}, errs []error) {
+func loadFilesYamlFromFolderRecursive(cfgFolder *CfgLoadFilesYamlFolder, opts *LoadFilesYamlOptions) (datas []interface{}, errs []error) {
 	if err := filepath.WalkDir(cfgFolder.Path, func(path string, d fs.DirEntry, err error) error {
 		if d.IsDir() {
 			return nil
